@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+
+
+	<ui:composition template="WEB-INF/templates/BasicTemplate.xhtml">
+	<ui:define name="title">Timetable</ui:define>
+		<ui:define name="content">
+
+			<p:panel rendered="#{!loginBean.admin}">
+				#{loginBean.backToLogin()}
+			</p:panel>
+
+			<p:panel rendered="#{loginBean.admin}">
+			<h:form>
+				<h2>Choose date</h2>
+				<h:panelGrid columns="3">
+					<p:outputLabel value="Date: " for="date"></p:outputLabel>
+					<p:calendar id="date" value="#{timeTableRowBean.date}"
+						pattern="dd-MM-yyyy" required="true">
+					</p:calendar>
+					<p:message for="date" display="icon" id="msgDate" />
+
+				</h:panelGrid>
+				<p:commandButton value="Find data"
+					action="#{timeTableRowBean.findRowsOnDate}" update="form"
+					icon="ui-icon-search" />
+
+			</h:form>
+
+			<h:form>
+				<h2>Convert overdue bookings in a free status</h2>
+				<p:commandButton value="Convert"
+					action="#{bookingBean.convertToFreeStatus()}"
+					icon="ui-icon-refresh" />
+			</h:form>
+
+			<h:form id="form">
+				<p:messages id="messages" showDetail="true" autoUpdate="true"
+					closable="true" />
+
+				<h2>TimeTable</h2>
+				<p:commandButton value="Add new row to the TimeTable" action="#{timeTableRowBean.addRow}">
+				</p:commandButton>
+				<br />
+				<br />
+				<p:outputLabel value="No records found" rendered="#{empty timeTableRowBean.rows}" />
+
+				<p:dataTable style="font-size: 12px;"
+
+				value="#{timeTableRowBean.rows}" var="row" rendered="#{not empty timeTableRowBean.rows}">
+
+					<p:column>
+						<f:facet name="header">Date</f:facet>
+						<h:outputText value="#{row.date}">
+						</h:outputText>
+
+
+					</p:column>
+
+					<p:column style="width:;">
+						<f:facet name="header" >Flight ID</f:facet>
+	#{row.flight.id}
+	</p:column>
+
+					<p:column style="width:38px;text-align: center">
+						<p:commandButton update=":form:flightDetail"
+							oncomplete="PF('flightDialog').show()" icon="ui-icon-info"
+							title="View">
+							<f:setPropertyActionListener value="#{row}"
+								target="#{timeTableRowBean.selectedRow}" />
+						</p:commandButton>
+					</p:column>
+
+
+					<p:column>
+						<f:facet name="header">Amount of tickets</f:facet>
+	#{row.amountOfTickets}
+	</p:column>
+
+					<p:column>
+						<f:facet name="header">Amount of available tickets</f:facet>
+	#{row.amountOfAvailableTickets}
+	</p:column>
+
+					<p:column>
+						<f:facet name="header">Price for one ticket, $</f:facet>
+						<p:outputLabel value="#{row.price}">
+							<f:convertNumber currencySymbol="$" maxFractionDigits="2"
+								type="currency" />
+						</p:outputLabel>
+					</p:column>
+
+
+					<p:column>
+						<f:facet name="header">Status</f:facet>
+	#{timeTableRowBean.getStatuses()[row.status]}
+	</p:column>
+
+					<p:column>
+						<f:facet name="header"></f:facet>
+						<p:commandButton action="#{timeTableRowBean.editRow(row.id)}"
+							value="Edit" icon="ui-icon-pencil" />
+
+					</p:column>
+
+					<p:column>
+						<f:facet name="header"></f:facet>
+						<p:commandButton update=":form:removingPanel"
+							oncomplete="PF('rowDialog').show()" value="Remove"
+							icon="ui-icon-trash">
+							<f:setPropertyActionListener value="#{row}"
+								target="#{timeTableRowBean.selectedRow}" />
+						</p:commandButton>
+					</p:column>
+
+				</p:dataTable>
+
+
+				<p:dialog header="Flight Info" widgetVar="flightDialog" modal="true"
+					showEffect="fade" hideEffect="fade" resizable="false">
+					<p:outputPanel id="flightDetail" style="text-align:center;">
+
+
+						<p:panelGrid columns="2">
+
+							<h:outputText value="Flight Number:" />
+							<h:outputText
+								value="#{timeTableRowBean.selectedRow.flight.flightNumber}" />
+
+							<h:outputText value="Departure Time:" />
+							<h:outputText
+								value="#{timeTableRowBean.selectedRow.flight.depTime}" />
+
+							<h:outputText value="Duration:" />
+							<h:outputText
+								value="#{timeTableRowBean.selectedRow.flight.duration}" />
+
+							<h:outputText value="From city:" />
+							<h:outputText
+								value="#{timeTableRowBean.selectedRow.flight.fromCity}" />
+
+							<h:outputText value="To city:" />
+							<h:outputText
+								value="#{timeTableRowBean.selectedRow.flight.toCity}" />
+
+							<h:outputText value="Airway:" />
+							<h:outputText
+								value="#{timeTableRowBean.selectedRow.flight.airway}" />
+
+						</p:panelGrid>
+
+					</p:outputPanel>
+				</p:dialog>
+
+				<p:dialog header="Removing row" widgetVar="rowDialog" modal="true"
+					showEffect="fade" hideEffect="fade" resizable="false">
+					<p:outputPanel id="removingPanel" style="text-align:center;">
+						<p:panelGrid columns="2">
+
+							<p:outputLabel value="Remove this row from timeTable?" />
+							<p:outputLabel />
+							<p:commandButton action="#{timeTableRowBean.removeRow()}"
+								value="Remove" icon="ui-icon-trash" ajax="false" />
+							<p:commandButton action="timetable" ajax="false" value="Cancel"
+								icon="ui-icon-arrowreturnthick-1-w" />
+						</p:panelGrid>
+					</p:outputPanel>
+
+
+				</p:dialog>
+
+			</h:form>
+
+
+</p:panel>
+		</ui:define>
+	</ui:composition>
+</html>

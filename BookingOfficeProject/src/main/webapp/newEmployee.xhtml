@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+
+	<ui:composition template="WEB-INF/templates/BasicTemplate.xhtml">
+	<ui:define name="title">New Employee</ui:define>
+		<ui:define name="content">
+
+			<p:panel rendered="#{!loginBean.security}">
+				#{loginBean.backToLogin()}
+			</p:panel>
+
+			<p:panel rendered="#{loginBean.security}">
+
+				<h:form>
+
+					<p:panel header="New Employee" id="panel"
+						>
+
+						<p:messages id="messages" showDetail="true" autoUpdate="true"
+							closable="true" />
+
+						<h:panelGrid columns="3" cellpadding="5">
+							<p:outputLabel for="login" value="Login:"
+								style="font-weight:bold" />
+							<p:inputText id="login" value="#{employeeBean.employee.login}"
+								required="true">
+								<f:validateLength minimum="2" />
+							</p:inputText>
+							<p:message for="login" id="msgLogin" />
+
+
+							<p:outputLabel for="password" value="Password:"
+								style="font-weight:bold" />
+							<p:inputText id="password"
+								value="#{employeeBean.employee.password}" required="true">
+								<f:validateLength minimum="4" />
+
+							</p:inputText>
+							<p:message for="password" id="msgPassword" />
+
+
+							<p:outputLabel for="firstName" value="First name:"
+								style="font-weight:bold" />
+							<p:inputText id="firstName"
+								value="#{employeeBean.employee.firstName}" required="true">
+								<f:validateLength minimum="4" />
+
+							</p:inputText>
+							<p:message for="firstName" id="msgFirstName" />
+
+
+							<p:outputLabel for="lastName" value="Last name:"
+								style="font-weight:bold" />
+							<p:inputText id="lastName"
+								value="#{employeeBean.employee.lastName}" required="true">
+								<f:validateLength minimum="3" />
+
+							</p:inputText>
+							<p:message for="lastName" id="msgLastName" />
+
+							<p:outputLabel for="role" value="Role:" style="font-weight:bold" />
+							<h:selectOneMenu id="role" value="#{employeeBean.employee.role}"
+								 required="true">
+								<f:selectItem itemValue="1" itemLabel="Security Officer" />
+								<f:selectItem itemValue="2" itemLabel="Administrator" />
+								<f:selectItem itemValue="3" itemLabel="Booking Office Accountant" />
+								<f:selectItem itemValue="4" itemLabel="Business Analytic" />
+							</h:selectOneMenu>
+							<p:message for="role" id="msgRole" />
+
+							<p:outputLabel for="status" value="Status:"
+								style="font-weight:bold" />
+							<p:selectOneRadio id="status"
+								value="#{employeeBean.employee.status}" required="true">
+								<f:selectItem itemValue="1" itemLabel="ACTIVATED" />
+								<f:selectItem itemValue="2" itemLabel="DEACTIVATED" />
+							</p:selectOneRadio>
+							<p:message for="status" id="msgStatus" />
+
+
+							<p:outputLabel />
+							<p:outputLabel />
+							<p:outputLabel />
+
+							<p:commandButton value="Submit" ajax="false"
+								action="#{employeeBean.saveEmployee}" icon="ui-icon-check" />
+
+							<p:commandButton value="Cancel" ajax="false"
+								action="#{employeeBean.cancelSelected}" immediate="true"
+								icon="ui-icon-arrowreturnthick-1-w" />
+
+						</h:panelGrid>
+
+
+					</p:panel>
+				</h:form>
+
+			</p:panel>
+		</ui:define>
+	</ui:composition>
+
+</html>

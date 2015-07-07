@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+
+	<ui:composition template="WEB-INF/templates/BasicTemplate.xhtml">
+	<ui:define name="title">Successfully booked!</ui:define>
+		<ui:define name="content">
+
+		<p:panel rendered="#{empty bookingBean.completedBookings}">
+		#{bookingBean.backToMain()}
+		</p:panel>
+
+		<p:panel>
+			<h1>Dear #{bookingBean.customer.firstName}
+				#{bookingBean.customer.lastName}!</h1>
+			<h3>Your tickets were successfully booked!</h3>
+			<h:form>
+				<p:commandButton action="index" value="Back to the main page"
+					icon="ui-icon-arrowthick-1-w" ajax="false" />
+			</h:form>
+			</p:panel>
+		</ui:define>
+	</ui:composition>
+</html>

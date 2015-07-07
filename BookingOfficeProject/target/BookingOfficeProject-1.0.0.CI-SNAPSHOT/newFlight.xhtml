@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+<h:head>
+	<title>New Flight</title>
+	<h:outputStylesheet library="css" name="style.css" />
+</h:head>
+<h:body>
+
+	<ui:composition template="WEB-INF/templates/BasicTemplate.xhtml">
+		<ui:define name="content">
+			<p:panel rendered="#{!loginBean.admin}">
+			<h1>You don't have access to this page!</h1>
+			</p:panel>
+
+			<p:panel rendered="#{loginBean.admin}">
+			<h:form>
+<p:panel id="panel" header="Authorization">
+
+        <p:messages id="msgs" />
+
+					<h:panelGrid columns="3" cellpadding="5">
+						<p:outputLabel for="fNumber" value="Flight Number:"
+							style="font-weight:bold" />
+						<p:inputText id="fNumber"
+							value="#{flightBean.flight.flightNumber}" required="true">
+							<f:validateLength minimum="2" />
+						</p:inputText>
+						<p:message for="fNumber" id="msgNumber" />
+
+
+						<p:outputLabel for="fFrom" value="From city:"
+							style="font-weight:bold" />
+						<p:inputText id="fFrom" value="#{flightBean.flight.fromCity}"
+							required="true">
+							<f:validateLength minimum="4" />
+
+						</p:inputText>
+						<p:message for="fFrom" id="msgFrom" />
+
+
+						<p:outputLabel for="fTo" value="To city:" style="font-weight:bold" />
+						<p:inputText id="fTo" value="#{flightBean.flight.toCity}"
+							required="true">
+							<f:validateLength minimum="4" />
+
+						</p:inputText>
+						<p:message for="fTo" id="msgTo" />
+
+
+						<p:outputLabel for="depTime" value="Departure time:"
+							style="font-weight:bold" />
+						<p:inputMask id="depTime" value="#{flightBean.flight.depTime}"
+							mask="99:99:99" required="true">
+							<f:converter converterId="com.bionic.edu.TimeConverter" />
+						</p:inputMask>
+						<p:message for="depTime" id="msgDepTime" />
+
+						<p:outputLabel for="duration" value="Duration:"
+							style="font-weight:bold" />
+						<p:inputMask id="duration" value="#{flightBean.flight.duration}"
+							mask="99:99:99" required="true">
+							<f:converter converterId="com.bionic.edu.TimeConverter" />
+						</p:inputMask>
+						<p:message for="duration" id="msgDuration" />
+
+
+
+
+
+
+
+						<p:outputLabel for="airway" value="Airway:"
+							style="font-weight:bold" />
+						<p:inputText id="airway" value="#{flightBean.flight.airway}"
+							required="true">
+							<f:validateLength minimum="4" />
+
+						</p:inputText>
+						<p:message for="airway"  id="msgAirway" />
+
+						<p:outputLabel for="aircraft" value="Aircraft:"
+							style="font-weight:bold" />
+						<p:inputText id="aircraft" value="#{flightBean.flight.aircraft}"
+							required="true">
+							<f:validateLength minimum="2" />
+
+						</p:inputText>
+						<p:message for="aircraft" id="msgAircraft" />
+
+						<p:outputLabel />
+						<p:outputLabel />
+						<p:outputLabel />
+
+						<p:commandButton value="Submit" action="#{flightBean.saveFlight}"
+							icon="ui-icon-check" />
+
+						<p:commandButton value="Cancel" action="flights" immediate="true"
+							icon="ui-icon-arrowreturnthick-1-w" />
+
+					</h:panelGrid>
+
+
+				</p:panel>
+			</h:form>
+
+</p:panel>
+		</ui:define>
+	</ui:composition>
+
+</h:body>
+</html>

@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+
+	<ui:composition template="WEB-INF/templates/BasicTemplate.xhtml">
+	<ui:define name="title">Flights</ui:define>
+		<ui:define name="content">
+			<p:panel rendered="#{!loginBean.admin}">
+			#{loginBean.backToLogin()}
+			</p:panel>
+
+			<p:panel rendered="#{loginBean.admin}">
+			<h3>Set Destination</h3>
+			<h:form>
+				<h:panelGrid columns="3">
+					<p:outputLabel for="destCity" value="Destination: "></p:outputLabel>
+						<p:autoComplete required="true" id="destCity" value="#{flightBean.dest}"
+						completeMethod="#{timeTableRowBean.completeDestText}" />
+						<p:message for="destCity" display="icon" id="msgDestCity" />
+				</h:panelGrid>
+				<p:commandButton value="Find flights"
+					action="#{flightBean.findFlights()}" update="form" icon="ui-icon-search"/>
+			</h:form>
+
+
+			<h:form id="form">
+			<p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />
+				<h2>Flights</h2>
+
+				<p:commandButton action="#{flightBean.addFlight}"
+					 value="Add new flight">
+				</p:commandButton>
+				<br />
+				<br />
+				<p:outputLabel value="No records found" rendered="#{empty flightBean.flights}" />
+
+				<p:dataTable style="font-size:12px; text-align:center" rendered="#{not empty flightBean.flights}"
+				  id="radioDT" var="flight" value="#{flightBean.flights}"
+					selection="#{timeTableRowBean.selectedFlight}" rowKey="#{flight.id}">
+					<f:facet name="header">
+            Select the flight
+        </f:facet>
+					<p:column selectionMode="single"
+						style="width:16px;" />
+					<p:column style="width:4%;">
+						<f:facet name="header">Id</f:facet>
+	#{flight.id}
+	</p:column>
+					<p:column>
+						<f:facet name="header">Flight Number</f:facet>
+	#{flight.flightNumber}
+	</p:column>
+					<p:column>
+						<f:facet name="header">From City</f:facet>
+	#{flight.fromCity}
+	</p:column>
+					<p:column>
+						<f:facet name="header">To City</f:facet>
+	#{flight.toCity}
+	</p:column>
+					<p:column>
+						<f:facet name="header">Departure Time</f:facet>
+	#{flight.depTime}
+	</p:column>
+
+					<p:column>
+						<f:facet name="header">Duration</f:facet>
+	#{flight.duration}
+	</p:column>
+
+					<p:column>
+						<f:facet name="header">Airway</f:facet>
+	#{flight.airway}
+	</p:column>
+					<p:column>
+						<f:facet name="header">Aircraft</f:facet>
+	#{flight.aircraft}
+	</p:column>
+
+	<p:column>
+						<f:facet name="header"></f:facet>
+	<p:commandButton action=
+      "#{flightBean.editFlight(flight.id)}"
+      value="Edit" icon="ui-icon-pencil"/>
+
+	</p:column>
+
+	<p:column style="width:12%;">
+						<f:facet name="header"></f:facet>
+						<p:commandButton update=":form:removingPanel"
+							oncomplete="PF('removeFlightDialog').show()" value="Remove"
+							icon="ui-icon-trash">
+							<f:setPropertyActionListener value="#{flight}"
+								target="#{flightBean.selectedFlight}" />
+						</p:commandButton>
+					</p:column>
+
+					<f:facet name="footer">
+						<p:commandButton process="radioDT" update=":form:flightDetail"
+							icon="ui-icon-check" value="Select"
+							oncomplete="PF('flightDialog').show()" />
+					</f:facet>
+				</p:dataTable>
+
+
+				<p:dialog header="Flight Info" widgetVar="flightDialog" modal="true"
+					showEffect="fade" hideEffect="fade" resizable="false">
+					<p:outputPanel id="flightDetail" style="text-align:center;">
+						<p:panelGrid columns="2">
+
+							<h:outputText value="Flight Number:" />
+							<h:outputText value="#{timeTableRowBean.selectedFlight.flightNumber}" />
+
+							<h:outputText value="From city:" />
+							<h:outputText value="#{timeTableRowBean.selectedFlight.fromCity}" />
+
+							<h:outputText value="To city:" />
+							<h:outputText value="#{timeTableRowBean.selectedFlight.toCity}" />
+
+							<h:outputText value="Airway:" />
+							<h:outputText value="#{timeTableRowBean.selectedFlight.airway}" />
+
+						</p:panelGrid>
+						<h:commandButton value="Select" action="#{timeTableRowBean.switchToNewRow()}" />
+
+
+					</p:outputPanel>
+				</p:dialog>
+
+				<p:dialog header="Removing flight" widgetVar="removeFlightDialog"
+					modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+					<p:outputPanel id="removingPanel" style="text-align:center;">
+						<p:panelGrid columns="2">
+
+							<p:outputLabel value="Remove this flight from Flights?" />
+							<p:outputLabel />
+							<p:commandButton action="#{flightBean.removeFlight()}"
+								value="Remove" icon="ui-icon-trash" update="form"/>
+							<p:commandButton action="flights" value="Cancel"  update="form"
+								icon="ui-icon-arrowreturnthick-1-w" />
+						</p:panelGrid>
+					</p:outputPanel>
+
+
+				</p:dialog>
+
+
+			</h:form>
+			</p:panel>
+
+		</ui:define>
+	</ui:composition>
+
+</html>

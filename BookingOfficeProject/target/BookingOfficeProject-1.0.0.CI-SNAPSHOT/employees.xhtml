@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+<h:head>
+	<title>Employees</title>
+	<h:outputStylesheet library="css" name="style.css" />
+</h:head>
+<h:body>
+
+	<ui:composition template="WEB-INF/templates/BasicTemplate.xhtml">
+		<ui:define name="content">
+
+			<p:panel rendered="#{!loginBean.security}">
+
+			<h1>You don't have access to this page!</h1>
+			</p:panel>
+
+			<p:panel rendered="#{loginBean.security}">
+
+
+			<h:form id="form">
+				<p:messages id="messages" showDetail="true" autoUpdate="true"
+					closable="true" />
+				<br />
+				<p:commandButton value="Find employees"
+					action="#{employeeBean.findEmployees()}" update="form" />
+
+				<h2>Employees</h2>
+
+				<p:commandLink action="#{employeeBean.addEmployee}" ajax="false">
+
+					<h:outputText value="Add new employee account" />
+				</p:commandLink>
+				<p:dataTable id="radioDT" var="employee"
+					value="#{employeeBean.employees}"
+					style= "font-size:14px;">
+					<p:column style="width:4%;">
+						<f:facet name="header">Id</f:facet>
+	#{employee.id}
+	</p:column>
+					<p:column>
+						<f:facet name="header">Login</f:facet>
+	#{employee.login}
+	</p:column>
+					<p:column>
+						<f:facet name="header">Password</f:facet>
+	#{employee.password}
+	</p:column>
+					<p:column>
+						<f:facet name="header">First Name</f:facet>
+	#{employee.firstName}
+	</p:column>
+					<p:column>
+						<f:facet name="header">Last Name</f:facet>
+	#{employee.lastName}
+	</p:column>
+
+					<p:column>
+						<f:facet name="header">Status</f:facet>
+	#{employeeBean.getStatuses()[employee.status]}
+	</p:column>
+
+					<p:column style="width:20%;">
+						<f:facet name="header">Role</f:facet>
+	#{employeeBean.getRoles()[employee.role]}
+	</p:column>
+
+
+					<p:column style="width:11%;">
+						<f:facet name="header"></f:facet>
+						<p:commandButton update=":form:changeStatus"
+							oncomplete="PF('statusDialog').show()" value="Change status"
+							icon="ui-icon-gear">
+							<f:setPropertyActionListener value="#{employee}"
+								target="#{employeeBean.selectedEmployee}" />
+						</p:commandButton>
+					</p:column>
+
+					<p:column style="width:11%;">
+						<f:facet name="header"></f:facet>
+						<p:commandButton update=":form:changeRole"
+							oncomplete="PF('roleDialog').show()" value="Change role"
+							icon="ui-icon-gear">
+							<f:setPropertyActionListener value="#{employee}"
+								target="#{employeeBean.selectedEmployee}" />
+						</p:commandButton>
+					</p:column>
+
+					<p:column style="width:8%;">
+						<f:facet name="header"></f:facet>
+						<p:commandButton action="#{employeeBean.editEmployee(employee.id)}"
+							value="Edit" icon="ui-icon-pencil" />
+
+					</p:column>
+
+
+				</p:dataTable>
+
+
+				<p:dialog header="Change status of employee"
+					widgetVar="statusDialog" modal="true" showEffect="fade"
+					hideEffect="fade" resizable="false">
+					<p:outputPanel id="changeStatus" style="text-align:center;">
+						<p:outputLabel value="Change status" />
+						<p:outputLabel />
+						<p:selectOneRadio id="radioStatus"
+							value="#{employeeBean.selectedEmployee.status}">
+							<f:selectItem itemValue="1" itemLabel="ACTIVATED" />
+							<f:selectItem itemValue="2" itemLabel="DEACTIVATED" />
+						</p:selectOneRadio>
+						<p:panelGrid columns="2">
+
+							<p:commandButton action="#{employeeBean.saveSelected()}"
+								ajax="false" value="Save" icon="ui-icon-check" />
+
+							<p:commandButton action="#{employeeBean.cancelSelected()}"
+								ajax="false" value="Cancel" icon="ui-icon-arrowreturnthick-1-w" />
+						</p:panelGrid>
+					</p:outputPanel>
+
+
+				</p:dialog>
+
+				<p:dialog header="Change role of employee"
+					widgetVar="roleDialog" modal="true" showEffect="fade"
+					hideEffect="fade" resizable="false">
+					<p:outputPanel id="changeRole" style="text-align:center;">
+
+						<p:panelGrid columns="2" style="Grid">
+						<p:outputLabel value="Change role" />
+						<p:selectOneMenu id="menuRole"
+							value="#{employeeBean.selectedEmployee.role}" style="width:275px">
+							<f:selectItem itemValue="1" itemLabel="Security Officer" />
+							<f:selectItem itemValue="2" itemLabel="Administrator" />
+							<f:selectItem itemValue="3" itemLabel="Booking Office Accountant" />
+							<f:selectItem itemValue="4" itemLabel="Business Analytic" />
+													</p:selectOneMenu>
+
+
+							<p:commandButton action="#{employeeBean.saveSelected()}"
+								ajax="false" value="Save" icon="ui-icon-check" />
+
+							<p:commandButton action="#{employeeBean.cancelSelected()}"
+								ajax="false" value="Cancel" icon="ui-icon-arrowreturnthick-1-w" />
+						</p:panelGrid>
+					</p:outputPanel>
+				</p:dialog>
+
+
+
+			</h:form>
+			</p:panel>
+
+
+
+		</ui:define>
+	</ui:composition>
+
+</h:body>
+</html>

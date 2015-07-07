@@ -1,0 +1,86 @@
+@CHARSET "UTF-8";
+
+.panel {
+
+}
+
+.report {
+	text-align: center;
+	border-collapse: collapse;
+	border: 1px solid #000000;
+	table-layout: fixed;
+
+
+}
+.accountantTable {
+	text-align: center;
+	border-collapse: collapse;
+	border: 1px solid #000000;
+	font-size: 14px;
+	table-layout: fixed;
+}
+.cartTable {
+	border-collapse: collapse;
+	border: 1px solid #000000;
+	font-size: 14px;
+	table-layout: fixed;
+	text-align: center;
+}
+
+.flightTable {
+	text-align: center;
+	border-collapse: collapse;
+	border: 1px solid #000000;
+	font-size: 12px;
+	table-layout: fixed;
+}
+
+
+.flightTableHeader {
+	text-align: center;
+	background: none repeat scroll 0 0 #B5B5B5;
+	border-bottom: 1px solid #000000;
+	padding: 2px;
+}
+
+.flightTableOddRow {
+	text-align: center;
+	background: none repeat scroll 0 0 #FFFFFFF;
+}
+
+.flightTableEvenRow {
+	text-align: center;
+	background: none repeat scroll 0 0 #D3D3D3;
+}
+
+
+.timeTable {
+	border-collapse: collapse;
+	border: 1px solid #000000;
+	font-size: 14px;
+	table-layout: fixed;
+	text-align: center;
+
+}
+
+
+.timeTableHeader {
+	text-align: center;
+	background: none repeat scroll 0 0 #B5B5B5;
+	border-bottom: 1px solid #000000;
+	padding: 2px;
+}
+
+.timeTableOddRow {
+	text-align: center;
+	background: none repeat scroll 0 0 #FFFFFFF;
+}
+
+.timeTableEvenRow {
+	text-align: center;
+	background: none repeat scroll 0 0 #D3D3D3;
+}
+
+.Grid tr, .Grid td {
+    border: none;
+}

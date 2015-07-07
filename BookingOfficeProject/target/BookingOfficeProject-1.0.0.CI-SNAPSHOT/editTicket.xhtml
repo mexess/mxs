@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+<h:head>
+	<title>New Row in the TimeTable</title>
+	<h:outputStylesheet library="css" name="style.css" />
+</h:head>
+<h:body>
+
+	<ui:composition template="WEB-INF/templates/BasicTemplate.xhtml">
+		<ui:define name="content">
+			<h:form id="form">
+
+				<p:panel header="Edit ticket" id="panel" width="800"
+					styleClass="panel">
+					<p:messages autoUpdate="true" />
+					<h:panelGrid columns="3" cellpadding="5">
+						<p:outputLabel for="firstName" value="First name:"
+							style="font-weight:bold" />
+
+						<p:inputText required="true" id="firstName"
+							value="#{bookingBean.ticket.passFirstName}" style="width:96%"
+							label="Kitty">
+							<f:validateLength minimum="2" />
+						</p:inputText>
+
+						<p:message for="firstName" id="msgFirstName" />
+
+						<p:outputLabel for="lastName" value="Last name:"
+							style="font-weight:bold" />
+
+						<p:inputText required="true" id="lastName"
+							value="#{bookingBean.ticket.passLastName}" style="width:96%"
+							label="Last Name">
+							<f:validateLength minimum="2" />
+
+						</p:inputText>
+
+						<p:message for="lastName" id="msgLastName" />
+
+						<p:outputLabel for="date" value="Date of birth:"
+							style="font-weight:bold" />
+
+						<p:calendar id="date" navigator="true"
+							value="#{bookingBean.ticket.passDateOfBirth}" required="true"
+							pattern="yyyy-MM-dd">
+							<f:converter converterId="com.bionic.edu.DateConverter" />
+						</p:calendar>
+
+						<p:message for="date" id="msgDate" />
+
+						<p:outputLabel for="passport" value="Passport No:"
+							style="font-weight:bold" />
+
+						<p:inputText required="true" id="passport"
+							value="#{bookingBean.ticket.passPassportNo}" style="width:96%"
+							label="Passport">
+							<f:validateLength minimum="8" />
+						</p:inputText>
+
+						<p:message for="passport" id="msgPassport" />
+
+
+
+						<p:outputLabel />
+						<p:outputLabel />
+						<p:outputLabel />
+
+						<p:commandButton value="Save"
+							action="cart" icon="ui-icon-check" />
+
+					</h:panelGrid>
+
+
+				</p:panel>
+			</h:form>
+
+		</ui:define>
+	</ui:composition>
+
+</h:body>
+</html>

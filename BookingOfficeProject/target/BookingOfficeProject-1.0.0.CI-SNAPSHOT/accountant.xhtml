@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+<h:head>
+	<title>Welcome to Booking Office</title>
+	<h:outputStylesheet library="css" name="style.css" />
+</h:head>
+<h:body>
+
+	<ui:composition template="WEB-INF/templates/BasicTemplate.xhtml">
+		<ui:define name="content">
+			<p:panel rendered="#{!loginBean.accountant}">
+			<br />
+			<h1>You don't have access to this page!</h1>
+			</p:panel>
+
+			<p:panel rendered="#{loginBean.accountant}">
+
+			<h:form id="form">
+				<br />
+				<p:commandButton icon="ui-icon-search" value="Find all bookings"
+					action="#{accountantBean.findAllBookedTickets()}" update="form" />
+				<br />
+				<p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />
+				<p:panel rendered="#{not empty accountant}"></p:panel>
+				<h2>Customer bookings</h2>
+				<p:dataTable value="#{accountantBean.bookings}" var="booking"
+					styleClass="accountantTable">
+					<p:column>
+						<f:facet name="header">Booking date</f:facet>
+						<p:outputLabel value="#{booking.date}">
+							<f:converter converterId="com.bionic.edu.DTConverter" />
+						</p:outputLabel>
+					</p:column>
+
+					<p:column>
+						<f:facet name="header">Customer info</f:facet>
+						<p:commandButton update=":form:customerDetail"
+							oncomplete="PF('customerDialog').show()" icon="ui-icon-info"
+							title="View">
+							<f:setPropertyActionListener value="#{booking}"
+								target="#{accountantBean.booking}" />
+						</p:commandButton>
+					</p:column>
+
+					<p:column>
+						<f:facet name="header">Total price, $</f:facet>
+						<p:outputLabel value="#{booking.totalPrice}">
+							<f:convertNumber currencySymbol="$" maxFractionDigits="2"
+								type="currency" />
+						</p:outputLabel>
+					</p:column>
+
+					<p:column>
+						<f:facet name="header">Ticket Status</f:facet>
+						#{accountantBean.getStatuses()[booking.ticketStatus]}
+					</p:column>
+
+					<p:column>
+						<f:facet name="header"></f:facet>
+						<p:commandButton action="#{accountantBean.changeToSoldStatus(booking.id)}"
+							value="Change status to SOLD" icon="ui-icon-circle-arrow-e" update="form" />
+
+					</p:column>
+
+				</p:dataTable>
+
+				<p:dialog header="Customer Info" widgetVar="customerDialog"
+					modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+					<p:outputPanel id="customerDetail" style="text-align:center;">
+
+
+						<p:panelGrid columns="2">
+
+							<h:outputText value="First Name:" />
+							<h:outputText
+								value="#{accountantBean.booking.customer.firstName}" />
+
+							<h:outputText value="Last Name:" />
+							<h:outputText value="#{accountantBean.booking.customer.lastName}" />
+
+							<h:outputText value="Date of birth:" />
+							<h:outputText
+								value="#{accountantBean.booking.customer.dateOfBirth}" />
+
+							<h:outputText value="Email:" />
+							<h:outputText value="#{accountantBean.booking.customer.email}" />
+
+							<h:outputText value="Phone:" />
+							<h:outputText
+								value="#{accountantBean.booking.customer.phoneNumber}" />
+
+							<h:outputText value="Passport No:" />
+							<h:outputText
+								value="#{accountantBean.booking.customer.passportNo}" />
+
+						</p:panelGrid>
+
+					</p:outputPanel>
+				</p:dialog>
+
+
+			</h:form>
+			</p:panel>
+
+		</ui:define>
+	</ui:composition>
+</h:body>
+</html>

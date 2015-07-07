@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core">
+<body>
+	<ui:composition>
+		<h:link outcome="#{loginBean.banner()}"><p:graphicImage name="/images/logo.png" /></h:link>
+		<h:form>
+			<p:growl id="messages" />
+
+			<p:menubar>
+				<p:menuitem value="Main" url="index.xhtml"
+					rendered="#{!loginBean.loggedIn}" />
+				<p:menuitem value="TimeTable" url="timetable.xhtml"
+					rendered="#{loginBean.admin}" />
+				<p:menuitem value="Flights" url="flights.xhtml"
+					rendered="#{loginBean.admin}" />
+				<p:menuitem value="Main" url="accountant.xhtml"
+					rendered="#{loginBean.accountant}" />
+				<p:menuitem value="Main" url="analytic.xhtml"
+					rendered="#{loginBean.analytic}" />
+				<p:menuitem value="Main" url="employees.xhtml"
+					rendered="#{loginBean.security}" />
+				<p:menuitem value="Cart (#{bookingBean.completedTickets.size()})"
+					url="cart.xhtml" rendered="#{!loginBean.loggedIn}" />
+
+				<p:menuitem ajax="false" value="Login" url="login.xhtml" rendered="#{!loginBean.loggedIn}"/>
+				<f:facet name="options">
+
+					<p:outputLabel value="#{loginBean.welcome()}   "
+						rendered="#{loginBean.loggedIn}" />
+
+					<p:commandButton ajax="false" value="Logout" icon="ui-icon-extlink"
+						action="#{loginBean.logout()}" rendered="#{loginBean.loggedIn}" />
+
+
+				</f:facet>
+
+
+			</p:menubar>
+		</h:form>
+	</ui:composition>
+
+</body>
+</html>

@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+<h:head>
+	<title>Passenger Details</title>
+	<h:outputStylesheet library="css" name="style.css" />
+</h:head>
+<h:body>
+
+	<ui:composition template="WEB-INF/templates/BasicTemplate.xhtml">
+		<ui:define name="content">
+
+			<h:form>
+				<p:accordionPanel>
+					<p:tab title="Flight information" rendered="#{bookingBean.bookedRow != null}">
+
+							<p:graphicImage name="/images/airplane.png" />
+							<p:outputLabel></p:outputLabel>
+							<table class="timeTable" border="1">
+								<tr class="timeTableHeader">
+									<th><p:outputLabel value="Flight number:"></p:outputLabel></th>
+									<th><p:outputLabel value="Date:"></p:outputLabel></th>
+									<th><p:outputLabel value="Departure time:"></p:outputLabel></th>
+									<th><p:outputLabel value="Duration:"></p:outputLabel></th>
+									<th><p:outputLabel value="From city:"></p:outputLabel></th>
+									<th><p:outputLabel value="To city:"></p:outputLabel></th>
+									<th><p:outputLabel value="Airway:"></p:outputLabel></th>
+									<th><p:outputLabel value="Aircraft:"></p:outputLabel></th>
+								</tr>
+								<tr>
+									<td><p:outputLabel
+											value="#{bookingBean.bookedRow.flight.flightNumber}"></p:outputLabel></td>
+									<td><p:outputLabel value="#{bookingBean.bookedRow.date}"></p:outputLabel></td>
+									<td><p:outputLabel value="#{bookingBean.bookedRow.flight.depTime}"></p:outputLabel></td>
+									<td><p:outputLabel value="#{bookingBean.bookedRow.flight.duration}"></p:outputLabel></td>
+									<td><p:outputLabel value="#{bookingBean.bookedRow.flight.fromCity}"></p:outputLabel></td>
+									<td><p:outputLabel value="#{bookingBean.bookedRow.flight.toCity}"></p:outputLabel></td>
+									<td><p:outputLabel value="#{bookingBean.bookedRow.flight.airway}"></p:outputLabel></td>
+									<td><p:outputLabel value="#{bookingBean.bookedRow.flight.aircraft}"></p:outputLabel></td>
+								</tr>
+							</table>
+
+					</p:tab>
+				</p:accordionPanel>
+
+			</h:form>
+
+			<h:form id="form">
+
+				<p:panel>
+					<p:messages autoUpdate="true" />
+					<ui:repeat var="ticket" value="#{bookingBean.tickets}">
+						<p:panel
+							header="Passenger #{bookingBean.tickets.indexOf(ticket)+1} info"
+							id="panel" width="800" styleClass="panel">
+
+
+							<h:panelGrid columns="3" cellpadding="5">
+								<p:outputLabel for="firstName" value="First name:"
+									style="font-weight:bold" />
+
+								<p:inputText required="true" id="firstName"
+									value="#{ticket.passFirstName}" style="width:96%" label="Kitty">
+									<f:validateLength minimum="2" />
+								</p:inputText>
+
+								<p:message for="firstName" id="msgFirstName" />
+
+								<p:outputLabel for="lastName" value="Last name:"
+									style="font-weight:bold" />
+
+								<p:inputText required="true" id="lastName"
+									value="#{ticket.passLastName}" style="width:96%"
+									label="Last Name">
+									<f:validateLength minimum="2" />
+								</p:inputText>
+
+								<p:message for="lastName" id="msgLastName" />
+
+								<p:outputLabel for="date" value="Date of birth:"
+									style="font-weight:bold" />
+
+								<p:calendar id="date" navigator="true"
+									value="#{ticket.passDateOfBirth}" required="true"
+									pattern="yyyy-MM-dd">
+									<f:converter converterId="com.bionic.edu.DateConverter" />
+								</p:calendar>
+
+								<p:message for="date" id="msgDate" />
+
+								<p:outputLabel for="passport" value="Passport No:"
+									style="font-weight:bold" />
+
+								<p:inputText required="true" id="passport"
+									value="#{ticket.passPassportNo}" style="width:96%"
+									label="Passport">
+									<f:validateLength minimum="8" />
+								</p:inputText>
+
+								<p:message for="passport" id="msgPassport" />
+
+
+							</h:panelGrid>
+						</p:panel>
+						<br />
+					</ui:repeat>
+
+							<h:panelGrid columns="2" cellpadding="5">
+					<p:commandButton value="Go to cart"
+						action="#{bookingBean.goToCart()}" icon="ui-icon-check" />
+
+					<p:commandButton value="Cancel" immediate="true" action="index"
+						icon="ui-icon-arrowreturnthick-1-w" />
+						</h:panelGrid>
+
+				</p:panel>
+			</h:form>
+
+
+		</ui:define>
+	</ui:composition>
+</h:body>
+</html>

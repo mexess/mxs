@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+<h:head>
+	<title>New Row in the TimeTable</title>
+	<h:outputStylesheet library="css" name="style.css" />
+</h:head>
+<h:body>
+
+	<ui:composition template="WEB-INF/templates/BasicTemplate.xhtml">
+		<ui:define name="content">
+			<p:panel rendered="#{!loginBean.admin}">
+			<h1>You don't have access to this page!</h1>
+			</p:panel>
+
+			<p:panel rendered="#{loginBean.admin}">
+			<h:form>
+				<p:panel header="New Row in the TimeTable" id="panel" width="800"
+					styleClass="panel">
+
+					<p:messages autoUpdate="true" />
+
+					<h:panelGrid columns="3" cellpadding="5">
+						<p:outputLabel for="date" value="Date:" style="font-weight:bold" />
+
+						<p:calendar id="date" value="#{timeTableRowBean.row.date}"
+							required="true" pattern="yyyy-MM-dd">
+							<f:converter converterId="com.bionic.edu.DateConverter" />
+						</p:calendar>
+
+						<p:message for="date" display="icon" id="msgDate" />
+
+						<p:outputLabel for="flight" value="Flight:"
+							style="font-weight:bold" />
+						<p:outputLabel id="flight"
+							value="#{timeTableRowBean.row.flight.flightNumber}" />
+						<h:commandButton value="Select flight" action="flights"
+							immediate="true" />
+
+						<p:outputLabel for="amountOfTickets" value="Amount of tickets:"
+							style="font-weight:bold" />
+						<p:inputText id="amountOfTickets"
+							value="#{timeTableRowBean.row.amountOfTickets}" required="true">
+							<f:convertNumber />
+							<f:validateLongRange minimum="#{timeTableRowBean.calculateMin()}"
+								maximum="500" />
+							<p:ajax update="msgAoT" event="keyup" />
+						</p:inputText>
+						<p:message for="amountOfTickets" display="icon" id="msgAoT" />
+
+
+						<p:outputLabel for="price" value="Price:" style="font-weight:bold" />
+						<p:inputText id="price" value="#{timeTableRowBean.row.price}"
+							required="true" converterMessage="Cannot convert to double.">
+							<p:ajax update="msgPrice" event="keyup" />
+							<f:validateDoubleRange minimum="1.0" maximum="4000.0" />
+						</p:inputText>
+						<p:message for="price" display="icon" id="msgPrice" />
+
+						<p:outputLabel for="radio" value="Flight Status:"
+							style="font-weight:bold" />
+
+						<p:selectOneRadio id="radio"
+							value="#{timeTableRowBean.row.status}" required="true">
+							<f:selectItem itemValue="1" itemLabel="ACTUAL" />
+							<f:selectItem itemValue="2" itemLabel="PAST" />
+						</p:selectOneRadio>
+						<p:message for="radio" display="icon" id="msgRadio" />
+
+						<p:outputLabel/>
+						<p:outputLabel/>
+						<p:outputLabel/>
+
+						<p:commandButton value="Submit"
+							action="#{timeTableRowBean.saveRow}" icon="ui-icon-check" />
+
+						<p:commandButton value="Cancel" immediate = "true"
+							action="timetable" icon="ui-icon-arrowreturnthick-1-w" />
+
+					</h:panelGrid>
+
+
+				</p:panel>
+			</h:form>
+
+</p:panel>
+		</ui:define>
+	</ui:composition>
+
+</h:body>
+</html>
